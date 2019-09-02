@@ -1,3 +1,5 @@
+I slightly modified [wonho-maker](https://github.com/wonho-maker)'s library to also work on a Wemos D1 clone. I only ested this on a single board with a single sketch.
+
 Adafruit_SH1106
 ===============
 
