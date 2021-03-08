@@ -1,16 +1,12 @@
 /*********************************************************************
 This is a library for our Monochrome OLEDs based on SSD1306 drivers
-
   Pick one up today in the adafruit shop!
   ------> http://www.adafruit.com/category/63_98
-
 These displays use SPI to communicate, 4 or 5 pins are required to
 interface
-
 Adafruit invests time and resources providing this open source code,
 please support Adafruit and open-source hardware by purchasing
 products from Adafruit!
-
 Written by Limor Fried/Ladyada  for Adafruit Industries.
 BSD license, check license.txt for more information
 All text above, and the splash screen below must be included in any redistribution
@@ -18,15 +14,15 @@ All text above, and the splash screen below must be included in any redistributi
 
 /*********************************************************************
 I change the adafruit SSD1306 to SH1106
-
 SH1106 driver similar to SSD1306 so, just change the display() method.
-
 However, SH1106 driver don't provide several functions such as scroll commands.
-
-
 *********************************************************************/
 
-#include <avr/pgmspace.h>
+#if (defined(__AVR__))
+#include <avr\pgmspace.h>
+#else
+#include <pgmspace.h>
+#endif
 #ifndef __SAM3X8E__
 #ifdef __avr__
  #include <util/delay.h>
@@ -393,7 +389,6 @@ void Adafruit_SH1106::SH1106_command(uint8_t c) {
   SH1106_command(0XFF);
   SH1106_command(SH1106_ACTIVATE_SCROLL);
 }
-
 // startscrollleft
 // Activate a right handed scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
@@ -408,7 +403,6 @@ void Adafruit_SH1106::startscrollleft(uint8_t start, uint8_t stop){
   SH1106_command(0XFF);
   SH1106_command(SH1106_ACTIVATE_SCROLL);
 }
-
 // startscrolldiagright
 // Activate a diagonal scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
@@ -425,7 +419,6 @@ void Adafruit_SH1106::startscrolldiagright(uint8_t start, uint8_t stop){
   SH1106_command(0X01);
   SH1106_command(SH1106_ACTIVATE_SCROLL);
 }
-
 // startscrolldiagleft
 // Activate a diagonal scroll for rows start through stop
 // Hint, the display is 16 rows tall. To scroll the whole display, run:
@@ -442,17 +435,14 @@ void Adafruit_SH1106::startscrolldiagleft(uint8_t start, uint8_t stop){
   SH1106_command(0X01);
   SH1106_command(SH1106_ACTIVATE_SCROLL);
 }
-
 void Adafruit_SH1106::stopscroll(void){
   SH1106_command(SH1106_DEACTIVATE_SCROLL);
 }
-
 // Dim the display
 // dim = true: display is dimmed
 // dim = false: display is normal
 void Adafruit_SH1106::dim(boolean dim) {
   uint8_t contrast;
-
   if (dim) {
     contrast = 0; // Dimmed display
   } else {
@@ -496,7 +486,6 @@ void Adafruit_SH1106::SH1106_data(uint8_t c) {
 }
 /*#define SH1106_SETLOWCOLUMN 0x00
 #define SH1106_SETHIGHCOLUMN 0x10
-
 #define SH1106_SETSTARTLINE 0x40*/
 
 void Adafruit_SH1106::display(void) {
@@ -590,7 +579,6 @@ void Adafruit_SH1106::display(void) {
   SH1106_command(SH1106_COLUMNADDR);
   SH1106_command(0);   // Column start address (0 = reset)
   SH1106_command(SH1106_LCDWIDTH-1); // Column end address (127 = reset)
-
   SH1106_command(SH1106_PAGEADDR);
   SH1106_command(0); // Page start address (0 = reset)
   #if SH1106_LCDHEIGHT == 64
@@ -602,14 +590,12 @@ void Adafruit_SH1106::display(void) {
   #if SH1106_LCDHEIGHT == 16
     SH1106_command(1); // Page end address
   #endif
-
   if (sid != -1)
   {
     // SPI
     *csport |= cspinmask;
     *dcport |= dcpinmask;
     *csport &= ~cspinmask;
-
     for (uint16_t i=0; i<(SH1106_LCDWIDTH*SH1106_LCDHEIGHT/8); i++) {
       fastSPIwrite(buffer[i]);
       //SH1106_data(buffer[i]);
@@ -623,10 +609,8 @@ void Adafruit_SH1106::display(void) {
     uint8_t twbrbackup = TWBR;
     TWBR = 12; // upgrade to 400KHz!
 #endif
-
     //Serial.println(TWBR, DEC);
     //Serial.println(TWSR & 0x3, DEC);
-
     // I2C
 	int k = 0;
     for (uint16_t i=0; i<(SH1106_LCDWIDTH*SH1106_LCDHEIGHT/8); i++) {
